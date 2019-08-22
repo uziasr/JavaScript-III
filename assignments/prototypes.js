@@ -40,7 +40,7 @@ function CharacterStats(attrs){
 }
 CharacterStats.prototype = Object.create(GameObject.prototype);
 CharacterStats.prototype.takeDamage = function(){//prototype
-  this.healthPoints = this.healthPoints - 2
+  this.healthPoints = this.healthPoints - 2 //added this 
   return `${this.name} took damage`
 }
 
@@ -49,7 +49,15 @@ CharacterStats.prototype.die = function(){//prototype
   this.healthPoints -= this.healthPoints
   return `${this.name} took a total damage of ${totalDamage} and has died`
 }
+CharacterStats.prototype.healthCheck = function(){
+if (this.healthPoints<=0){
+  return this.destroy()
+}
+else{
+  return(`${this.name} now has ${this.healthPoints} health`)
+}
 
+}
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
   * team
@@ -156,23 +164,29 @@ console.log(mage.healthPoints);
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
   function Villain(attrs){
     Humanoid.call(this, attrs)
+    //this.maxHP = attrs.maxHP
     this.specialSupply = attrs.specialSupply
   }
 
   Villain.prototype = Object.create(Humanoid.prototype)
+  
   Villain.prototype.attack = function(human){
-    //this.specialSupply += 5
-   return (`${human.takeDamage()} from ${this.name}, ${human.name} now has ${human.healthPoints} health`)
+    this.specialSupply += 2
+    //.healthCheck
+    console.log(`${human.takeDamage()} from ${this.name}`)
+   return (`${human.healthCheck()}`)
   }
-  Villain.prototype.specialAttack = function(human){
-    if (this.specialSupply>this.specialSupply/2){
-      this.specialSupply = this.specialSupply/2 -1
-    return (`${human.die()} at the hands of ${this.name}.....${human.destroy()}`)}
-    else{
-      console.log('You do not have enough Special Supply to use this attack!')
-    }
 
+  Villain.prototype.specialAttack = function(human){
+    
+    if (this.specialSupply>5){
+      this.specialSupply = this.specialSupply/2 -1
+    return (`${this.name} used a SPECIAL ATTACK! ${human.die()} at the hands of ${this.name}.....${human.destroy()}`)}
+    else{
+      return('You do not have enough Special Points to use this attack!')
+    }
    }
+
 
   const thief = new Villain({
     createdAt: new Date(),
@@ -196,7 +210,7 @@ console.log(thief.attack(mage))
 console.log(thief.specialAttack(archer))
 console.log(thief.specialAttack(mage))
 console.log(thief.attack(mage))
-console.log(thief.attack(swordsman))
+console.log(thief.specialAttack(swordsman))
 
 
 // console.log(thief.attack(mage))
